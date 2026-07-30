@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIOSA | Shirika la Okoa Sayari</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #050d0a;
+            --bg-card: #0d1b15;
+            --primary-green: #00ff88;
+            --deep-green: #1a4d3a;
+            --accent-lime: #c5ff4a;
+            --text-main: #e0e0e0;
+            --text-muted: #8a9a93;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        /* Preloader (High-Tech feel) */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-ring {
+            width: 60px;
+            height: 60px;
+            border: 4px solid transparent;
+            border-top-color: var(--primary-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Navbar (Glassmorphism) */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: 0.4s ease;
+        }
+
+        header.scrolled {
+            background: rgba(5, 13, 10, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px 6%;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-green);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            transition: 0.3s;
+        }
+        .logo-container:hover .logo-img { transform: rotate(360deg); transition: 0.8s; }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        .logo-text h2 {
+            font-size: 1.1rem;
+            color: var(--white);
+            font-weight: 700;
+            line-height: 1;
+        }
+        .logo-text span {
+            font-size: 0.7rem;
+            color: var(--primary-green);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        nav ul li a:hover { color: var(--white); }
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary-green);
+            transition: width 0.3s;
+        }
+        nav ul li a:hover::after { width: 100%; }
+
+        .btn-contact {
+            background: var(--primary-green);
+            color: var(--bg-dark);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+            font-family: 'Outfit', sans-serif;
+        }
+        .btn-contact:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 255, 136, 0.5);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--white);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        /* Hero Section (High-Tech Mesh Gradient) */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 6% 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.15) 0%, transparent 70%);
+            top: -200px;
+            right: -100px;
+            z-index: -1;
+            filter: blur(40px);
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(197, 255, 74, 0.1) 0%, transparent 70%);
+            bottom: -100px;
+            left: -100px;
+            z-index: -1;
+            filter: blur(40px);
+        }
+
+        .hero-content {
+            max-width: 60%;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary-green);
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .hero-content h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.1;
+            margin-bottom: 25px;
+        }
+
+        .hero-content h1 span {
+            background: linear-gradient(90deg, var(--primary-green), var(--accent-lime));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+            max-width: 600px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-outline {
+            padding: 16px 35px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-primary {
+            background: var(--primary-green);
+            color: var(--bg-dark);
+        }
+        .btn-primary:hover { box-shadow: 0 0 30px rgba(0, 255, 136, 0.5); transform: translateY(-3px); }
+        
+        .btn-outline {
+            border: 1px solid var(--text-muted);
+            color: var(--white);
+        }
+        .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.05); }
+
+        /* Sections General */
+        .section {
+            padding: 120px 6%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            color: var(--white);
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            color: var(--primary-green);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 2.2rem;
+            color: var(--white);
+            margin-bottom: 25px;
+            line-height: 1.2;
+        }
+
+        .about-text p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+
+        .about-img {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 4/5; /* Prevents image cutoff */
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .about-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        .about-img:hover img { transform: scale(1.05); }
+
+        /* Stats Section (Bento Grid Style) */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 40px 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.4s;
+            text-align: left;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary-green);
+            transform: translateY(-10px);
+            background: linear-gradient(145deg, var(--bg-card), #142b21);
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--primary-green);
+            margin-bottom: 20px;
+        }
+
+        .stat-card h2 {
+            font-size: 3rem;
+            color: var(--white);
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Projects Section */
+        .projects-bg {
+            background: #081410;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.4s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .project-img {
+            width: 100%;
+            aspect-ratio: 16/10; /* No more cutoff */
+            overflow: hidden;
+        }
+
+        .project-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s;
+        }
+        .project-card:hover .project-img img { transform: scale(1.1); }
+
+        .project-content {
+            padding: 30px;
+        }
+
+        .project-content span {
+            color: var(--accent-lime);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .project-content h3 {
+            font-size: 1.5rem;
+            margin: 12px 0 15px;
+            color: var(--white);
+        }
+
+        .project-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .read-more {
+            text-decoration: none;
+            color: var(--primary-green);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: gap 0.3s;
+        }
+        .read-more:hover { gap: 15px; }
+
+        /* Gallery Section (Modern Grid) */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 250px;
+            gap: 15px;
+        }
+
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 15px;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease, filter 0.6s ease;
+            filter: grayscale(20%);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+            filter: grayscale(0%);
+        }
+
+        .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+        .gallery-item:nth-child(4) { grid-column: span 2; }
+
+        /* Footer */
+        footer {
+            background: #020604;
+            padding: 80px 6% 30px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .footer-col h3 {
+            margin-bottom: 25px;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+
+        .footer-col p, .footer-col li {
+            margin-bottom: 15px;
+            color: var(--text-muted);
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+        }
+        .footer-col li i { color: var(--primary-green); }
+
+        .footer-col a {
+            text-decoration: none;
+            color: var(--text-muted);
+            transition: 0.3s;
+        }
+        .footer-col a:hover { color: var(--primary-green); }
+
+        .socials {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .socials a {
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .socials a:hover {
+            background: var(--primary-green);
+            color: var(--bg-dark);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 30px;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content h1 { font-size: 3.2rem; }
+            .about-grid { grid-template-columns: 1fr; gap: 40px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px; }
+            .gallery-item:nth-child(1), .gallery-item:nth-child(4) { grid-column: span 1; grid-row: span 1; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content { max-width: 100%; text-align: center; margin: 0 auto; }
+            .hero-btns { justify-content: center; }
+            .hero-content h1 { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            
+            nav ul {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 75%;
+                height: 100vh;
+                background: rgba(5, 13, 10, 0.98);
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: 0.5s;
+                gap: 40px;
+            }
+            nav ul.active { right: 0; }
+            .menu-toggle { display: block; }
+            .btn-contact { display: none; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="loader-ring"></div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header id="header">
+        <a href="#home" class="logo-container">
+            <img src="https://z-cdn-media.chatglm.cn/files/5d920aff-3727-4575-beec-763021595d7b.jpg?auth_key=1885372081-b786044483df46b3a66bebc7f284d65e-0-c5b63db3377789bcf7c7d2ed6b1d08ae" alt="SHIOSA Logo" class="logo-img">
+            <div class="logo-text">
+                <h2>SHIOSA</h2>
+                <span>Save The Planet</span>
+            </div>
+        </a>
+        <nav>
+            <ul id="nav-menu">
+                <li><a href="#home">Nyumbani</a></li>
+                <li><a href="#about">Kuhusu Sisi</a></li>
+                <li><a href="#projects">Miradi</a></li>
+                <li><a href="#gallery">Picha</a></li>
+                <li><a href="#contact">Wasiliana</a></li>
+            </ul>
+        </nav>
+        <a href="#contact" class="btn-contact">Wasiliana Nasi</a>
+        <button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <span class="hero-badge"><i class="fas fa-leaf"></i> Tangu Mwaka 2012</span>
+            <h1>Tunakomesha Uharibifu wa Mazingira, <span>Tunapanda Miti na Kusaidia Elimu.</span></h1>
+            <p>Shirika la Okoa Sayari (SHIOSA) ni shirika la hiari linalojishughulisha na upandaji miti, mapambano dhidi ya mabadiliko ya tabianchi, na kuleta maendeleo ya kuduru kwa jamii zetu. Makao Makuu Mwanza, Shughuli Nyang'hwale - Geita.</p>
+            <div class="hero-btns">
+                <a href="#about" class="btn-primary">Jifunze Zaidi <i class="fas fa-arrow-right"></i></a>
+                <a href="#projects" class="btn-outline">Tazama Miradi</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="about-grid">
+            <div class="about-text reveal">
+                <h3>Maono Yetu ni Sayari Mpya na Tanzania ya Kijani</h3>
+                <p>SHIOSA ilianzishwa mwaka 2012 kwa Makao Makuu yake mkoani Mwanza, ikiwa na shughuli kubwa zinazoendelea Wilaya ya Nyang'hwale, mkoani Geita. Tunaamini kuwa ulinzi wa mazingira na maendeleo ya jamii vinakwenda sambamba.</p>
+                <p>Tunajihusisha sana na upandaji miti, kuanzisha hifadhi za misitu ya vijijini, na kutumia sanaa na elimu kuhamasisha jamii. Tumeunganisha juhudi za mazingira na miundombinu ya elimu kuhakikisha kila mtoto anapata mti wa kumlea na kutoa mbao za madarasa kwa ajili ya vizazi vijavyo.</p>
+                <a href="#projects" class="read-more">Tazama Miradi Yetu <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="about-img reveal">
+                <img src="https://z-cdn-media.chatglm.cn/files/60e7320a-fa94-4fa9-b1e2-014305e0eb35.jpg?auth_key=1885372081-a076b8b781c24c68bdaecedf471639a5-0-222f270dd6c15999a2bd859efb6e86fe" alt="Wataalamu wa Mazingira SHIOSA">
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section (Bento Grid) -->
+    <section class="section" style="padding-top: 0;">
+        <div class="stats-grid">
+            <div class="stat-card reveal">
+                <i class="fas fa-tree"></i>
+                <h2 data-target="175">0</h2>
+                <p>Elfu ya Miti Iliyopandwa (175,000+)</p>
+            </div>
+            <div class="stat-card reveal">
+                <i class="fas fa-school"></i>
+                <h2 data-target="86">0</h2>
+                <p>Shule Zenye Misitu</p>
+            </div>
+            <div class="stat-card reveal">
+                <i class="fas fa-map-marked-alt"></i>
+                <h2 data-target="56">0</h2>
+                <p>Vijiji Kilichohifadhiwa</p>
+            </div>
+            <div class="stat-card reveal">
+                <i class="fas fa-users"></i>
+                <h2 data-target="300">0</h2>
+                <p>Viongozi Waliofundishwa</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section projects-bg" id="projects">
+        <div class="section-header reveal">
+            <span class="section-subtitle">Miradi Yetu Mikubwa</span>
+            <h2 class="section-title">Tunaleta Mabadiliko ya Moja kwa Moja</h2>
+        </div>
+        <div class="projects-grid">
+            <!-- Project 1 -->
+            <div class="project-card reveal">
+                <div class="project-img">
+                    <img src="https://z-cdn-media.chatglm.cn/files/cc1e2b3e-dfa5-4442-9438-669ddcf1e59d.jpg?auth_key=1885372081-6d53c3eec0a44b168cf04422a4d8715f-0-30205982aed0cc9cb53a0f0b0861fe8b" alt="Wanafunzi Kitaluni">
+                </div>
+                <div class="project-content">
+                    <span>Mazingira & Elimu</span>
+                    <h3>Mradi wa Nyang'hwale Legacy</h3>
+                    <p>Mradi wa miaka 3 unaojumuisha kuanzisha misitu ya vijijini, upandaji miti wa kaya, na kuanzisha misitu ya shule ("Moto Mmoja, Mti Mmoja").</p>
+                    <a href="#" class="read-more">Soma Zaidi <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <!-- Project 2 -->
+            <div class="project-card reveal">
+                <div class="project-img">
+                    <img src="https://z-cdn-media.chatglm.cn/files/b240707c-2bca-4426-9935-408c244283cb.jpg?auth_key=1885372081-44fea1e43a774eb69235816b774e7c06-0-65bc9db8b6a7cafad61149ef6cb2e2df" alt="Mkutano na Wafadhili">
+                </div>
+                <div class="project-content">
+                    <span>Ushirikiano</span>
+                    <h3>Ushirikiano na Wafadhili</h3>
+                    <p>Kushirikiana na GGML/Barrick Bulyanhulu kwenye mikakati wa CSR. Kuhakikisha wachimbaji wanachangia miche na kurekebisha maeneo yaliyoharibiwa.</p>
+                    <a href="#" class="read-more">Soma Zaidi <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <!-- Project 3 -->
+            <div class="project-card reveal">
+                <div class="project-img">
+                    <img src="https://z-cdn-media.chatglm.cn/files/4e97c18e-09c5-4756-a250-2703bdad335c.jpg?auth_key=1885372081-3e7b20ab9f5143cb91a77564671ac1d4-0-8ed79919db18d34c6a3cc7cac576b07e" alt="Sanaa na Mazingira">
+                </div>
+                <div class="project-content">
+                    <span>Uhamasishaji</span>
+                    <h3>Sanaa na Elimu ya Mazingira</h3>
+                    <p>Kutumia sanaa, muziki, na dramu kufikisha ujumbe wa uhifadhi kwa jamii na shule. Tuzo za "Shule Bora ya Mazingira" hutolewa kila mwaka.</p>
+                    <a href="#" class="read-more">Soma Zaidi <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="section" id="gallery">
+        <div class="section-header reveal">
+            <span class="section-subtitle">Picha za Shughuli</span>
+            <h2 class="section-title">Tazama Jinsi Tunavyobadilisha Maisha</h2>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item reveal"><img src="https://z-cdn-media.chatglm.cn/files/60675216-042c-45bc-8a1c-02d36a057f1d.jpg?auth_key=1885372081-8b317e8147fc49ee8edb3349cc7acef8-0-060ff5c4a0e62a9708287ff4fab81958" alt="Wanafunzi taifa la kesho"></div>
+            <div class="gallery-item reveal"><img src="https://z-cdn-media.chatglm.cn/files/217daeb4-9fb4-49a4-bb6d-475c64558a6d.jpg?auth_key=1885372081-b4c5c7850a54425f8b4598b9c4dab1ca-0-a5e6a3196f47e73315f0c5fd41d19ba3" alt="Mkuu wa wilaya akizindua"></div>
+            <div class="gallery-item reveal"><img src="https://z-cdn-media.chatglm.cn/files/efb6d260-1e2f-4eaa-b796-439c904fb0b4.jpg?auth_key=1885372081-a28ca50c62e6463babea211853dc7443-0-5125e8bd58e6fafdcdd5e2b2dd4e5f24" alt="Elimu mazingira mashuleni"></div>
+            <div class="gallery-item reveal"><img src="https://z-cdn-media.chatglm.cn/files/d1e62602-4932-4a74-89d2-9f8d5561d5a5.jpg?auth_key=1885372081-db4beb67bbc449ea948cea313771581e-0-3c04a52ce143148cc1a50cb3e1778de2" alt="Mafunzo Barrick"></div>
+        </div>
+    </section>
+
+    <!-- Footer / Contact -->
+    <footer id="contact">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3>Kuhutu SHIOSA</h3>
+                <p>Shirika la Okoa Sayari (SHIOSA) linaendelea kupambana na mabadiliko ya tabianchi nchini Tanzania. Lengo letu ni kuhifadhi mazingira na kujenga vizazi vijavyo kupitia elimu na upandaji miti.</p>
+                <div class="socials">
+                    <a href="https://www.facebook.com/share/18ynbSjT4K/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Wasiliana Nasi</h3>
+                <ul>
+                    <li><i class="fas fa-user-tie"></i> Mratibu Mkuu: Amin</li>
+                    <li><i class="fas fa-phone-alt"></i> <a href="tel:+255713900200">+255 713 900 200</a></li>
+                    <li><i class="fas fa-envelope"></i> <a href="mailto:shiosa.mwanza@gmail.com">shiosa.mwanza@gmail.com</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Mahali Tulipo</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Makao Makuu: Mwanza, Tanzania</li>
+                    <li><i class="fas fa-map-pin"></i> Shughuli: Nyang'hwale, Geita</li>
+                    <li><i class="fas fa-clock"></i> Jumatatu - Ijumaa: 08:00 - 17:00</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Shirika la Okoa Sayari (SHIOSA). Haki zote zimehifadhiwa. | Imeundwa kwa teknolojia ya hali ya juu.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Preloader
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+            }, 500);
+        });
+
+        // Navbar Scroll Effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            if (navMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close menu on link click
+        document.querySelectorAll('#nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.querySelector('i').classList.remove('fa-times');
+                menuToggle.querySelector('i').classList.add('fa-bars');
+            });
+        });
+
+        // Scroll Reveal Animation
+        const reveals = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        reveals.forEach(reveal => revealObserver.observe(reveal));
+
+        // Animated Counter
+        const counters = document.querySelectorAll('.stat-card h2');
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = +entry.target.getAttribute('data-target');
+                    let count = 0;
+                    const speed = target / 50; 
+
+                    const updateCount = () => {
+                        if (count < target) {
+                            count += speed;
+                            entry.target.innerText = Math.ceil(count) + (target === 175 ? 'K+' : '+');
+                            setTimeout(updateCount, 30);
+                        } else {
+                            entry.target.innerText = target + (target === 175 ? 'K+' : '+');
+                        }
+                    };
+                    updateCount();
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        counters.forEach(counter => counterObserver.observe(counter));
+    </script>
+</body>
+</html>
