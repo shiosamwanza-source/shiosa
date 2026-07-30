@@ -7,18 +7,21 @@
     <!-- Premium Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --bg-dark: #050d0a;
             --bg-card: #0d1b15;
+            --bg-card-hover: #112720;
             --primary-green: #00ff88;
+            --primary-green-glow: rgba(0, 255, 136, 0.4);
             --deep-green: #1a4d3a;
             --accent-lime: #c5ff4a;
             --text-main: #e0e0e0;
             --text-muted: #8a9a93;
             --white: #ffffff;
+            --glass-border: rgba(255, 255, 255, 0.08);
         }
 
         * {
@@ -33,12 +36,25 @@
             background-color: var(--bg-dark);
             color: var(--text-main);
             overflow-x: hidden;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         h1, h2, h3, h4 {
             font-family: 'Outfit', sans-serif;
             letter-spacing: -0.02em;
+        }
+
+        /* Scroll Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-green), var(--accent-lime));
+            z-index: 9998;
+            box-shadow: 0 0 10px var(--primary-green);
+            transition: width 0.1s ease-out;
         }
 
         /* Preloader (High-Tech feel) */
@@ -84,10 +100,10 @@
         }
 
         header.scrolled {
-            background: rgba(5, 13, 10, 0.8);
+            background: rgba(5, 13, 10, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid var(--glass-border);
             padding: 15px 6%;
         }
 
@@ -105,9 +121,9 @@
             object-fit: cover;
             border: 2px solid var(--primary-green);
             box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
-            transition: 0.3s;
+            transition: 0.8s;
         }
-        .logo-container:hover .logo-img { transform: rotate(360deg); transition: 0.8s; }
+        .logo-container:hover .logo-img { transform: rotate(360deg); }
 
         .logo-text {
             display: flex;
@@ -122,7 +138,7 @@
         .logo-text span {
             font-size: 0.7rem;
             color: var(--primary-green);
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
         }
 
@@ -157,17 +173,18 @@
         .btn-contact {
             background: var(--primary-green);
             color: var(--bg-dark);
-            padding: 10px 25px;
+            padding: 12px 28px;
             border-radius: 30px;
             font-weight: 700;
             text-decoration: none;
             transition: 0.3s;
-            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+            box-shadow: 0 4px 20px var(--primary-green-glow);
             font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
         }
         .btn-contact:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0, 255, 136, 0.5);
+            box-shadow: 0 8px 30px var(--primary-green-glow);
         }
 
         .menu-toggle {
@@ -179,7 +196,7 @@
             border: none;
         }
 
-        /* Hero Section (High-Tech Mesh Gradient) */
+        /* Hero Section (High-Tech Mesh Gradient & Grid) */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -189,16 +206,32 @@
             overflow: hidden;
         }
 
+        .hero-grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -2;
+            mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
+        }
+
         .hero::before {
             content: '';
             position: absolute;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(0, 255, 136, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.12) 0%, transparent 70%);
             top: -200px;
             right: -100px;
             z-index: -1;
-            filter: blur(40px);
+            filter: blur(50px);
+            animation: pulse 8s infinite alternate;
         }
 
         .hero::after {
@@ -206,11 +239,16 @@
             position: absolute;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(197, 255, 74, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(197, 255, 74, 0.08) 0%, transparent 70%);
             bottom: -100px;
             left: -100px;
             z-index: -1;
-            filter: blur(40px);
+            filter: blur(50px);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.2); opacity: 1; }
         }
 
         .hero-content {
@@ -219,7 +257,9 @@
         }
 
         .hero-badge {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             padding: 8px 16px;
             background: rgba(0, 255, 136, 0.1);
             border: 1px solid rgba(0, 255, 136, 0.3);
@@ -273,7 +313,7 @@
             background: var(--primary-green);
             color: var(--bg-dark);
         }
-        .btn-primary:hover { box-shadow: 0 0 30px rgba(0, 255, 136, 0.5); transform: translateY(-3px); }
+        .btn-primary:hover { box-shadow: 0 0 30px var(--primary-green-glow); transform: translateY(-3px); }
         
         .btn-outline {
             border: 1px solid var(--text-muted);
@@ -301,7 +341,7 @@
 
         .section-subtitle {
             color: var(--primary-green);
-            font-weight: 500;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-size: 0.9rem;
@@ -334,8 +374,9 @@
             position: relative;
             border-radius: 20px;
             overflow: hidden;
-            aspect-ratio: 4/5; /* Prevents image cutoff */
-            border: 1px solid rgba(255,255,255,0.1);
+            aspect-ratio: 4/5;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
         .about-img img {
@@ -357,16 +398,33 @@
             background: var(--bg-card);
             padding: 40px 30px;
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
             transition: 0.4s;
             text-align: left;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-green);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
         }
 
         .stat-card:hover {
-            border-color: var(--primary-green);
+            border-color: rgba(0, 255, 136, 0.2);
+            background: var(--bg-card-hover);
             transform: translateY(-10px);
-            background: linear-gradient(145deg, var(--bg-card), #142b21);
         }
+        .stat-card:hover::before { transform: scaleX(1); }
 
         .stat-card i {
             font-size: 2rem;
@@ -396,37 +454,55 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
+            perspective: 1000px;
         }
 
         .project-card {
             background: var(--bg-card);
             border-radius: 20px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: 0.4s;
+            border: 1px solid var(--glass-border);
+            transition: transform 0.2s ease-out, border-color 0.4s, box-shadow 0.4s;
+            display: flex;
+            flex-direction: column;
+            transform-style: preserve-3d;
         }
 
         .project-card:hover {
-            transform: translateY(-10px);
             border-color: rgba(0, 255, 136, 0.3);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,136,0.1);
         }
 
         .project-img {
             width: 100%;
-            aspect-ratio: 16/10; /* No more cutoff */
+            height: 300px;
             overflow: hidden;
+            background: #050d0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .project-img img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s;
+            object-fit: contain; /* Hii inazuia picha ikatike kabisa */
+            transition: transform 0.6s, opacity 0.6s;
         }
-        .project-card:hover .project-img img { transform: scale(1.1); }
+        
+        /* Class maalum kwa picha inayohitaji kuonekana kwa cover (Zoom kidogo) */
+        .project-img-cover img {
+            object-fit: cover; 
+        }
+
+        .project-card:hover .project-img img { transform: scale(1.05); opacity: 0.9; }
 
         .project-content {
             padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .project-content span {
@@ -447,6 +523,7 @@
             color: var(--text-muted);
             font-size: 0.95rem;
             margin-bottom: 20px;
+            flex-grow: 1;
         }
 
         .read-more {
@@ -460,7 +537,7 @@
         }
         .read-more:hover { gap: 15px; }
 
-        /* Gallery Section (Modern Grid) */
+        /* Gallery Section */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -472,7 +549,7 @@
             overflow: hidden;
             border-radius: 15px;
             position: relative;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
         }
 
         .gallery-item img {
@@ -481,6 +558,18 @@
             object-fit: cover;
             transition: transform 0.6s ease, filter 0.6s ease;
             filter: grayscale(20%);
+        }
+        
+        /* Class maalum kwa picha ya Elimu ya Mazingira ili isikatike */
+        .gallery-contain {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-card);
+        }
+        .gallery-contain img {
+            object-fit: contain; /* Picha itaonekana yote */
+            filter: none;
         }
 
         .gallery-item:hover img {
@@ -495,7 +584,7 @@
         footer {
             background: #020604;
             padding: 80px 6% 30px;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid var(--glass-border);
         }
 
         .footer-grid {
@@ -556,10 +645,40 @@
 
         .footer-bottom {
             text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid var(--glass-border);
             padding-top: 30px;
             font-size: 0.85rem;
             color: #555;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-green);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.4s;
+            z-index: 999;
+            box-shadow: 0 4px 20px var(--primary-green-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .back-to-top:hover {
+            transform: translateY(-5px);
         }
 
         /* Animations */
@@ -576,6 +695,7 @@
         /* Responsive */
         @media (max-width: 1024px) {
             .hero-content h1 { font-size: 3.2rem; }
+            .hero-content { max-width: 90%; }
             .about-grid { grid-template-columns: 1fr; gap: 40px; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px; }
@@ -587,6 +707,7 @@
             .hero-btns { justify-content: center; }
             .hero-content h1 { font-size: 2.5rem; }
             .section-title { font-size: 2rem; }
+            .section { padding: 80px 5%; }
             
             nav ul {
                 position: fixed;
@@ -603,13 +724,16 @@
                 gap: 40px;
             }
             nav ul.active { right: 0; }
-            .menu-toggle { display: block; }
+            .menu-toggle { display: block; z-index: 1001; }
             .btn-contact { display: none; }
             .footer-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+
+    <!-- Scroll Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
 
     <!-- Preloader -->
     <div class="preloader" id="preloader">
@@ -619,7 +743,7 @@
     <!-- Header / Navbar -->
     <header id="header">
         <a href="#home" class="logo-container">
-            <img src="https://z-cdn-media.chatglm.cn/files/5d920aff-3727-4575-beec-763021595d7b.jpg?auth_key=1885372081-b786044483df46b3a66bebc7f284d65e-0-c5b63db3377789bcf7c7d2ed6b1d08ae" alt="SHIOSA Logo" class="logo-img">
+            <img src="https://z-cdn-media.chatglm.cn/files/5d920aff-3727-4575-beec-763021595d7b.jpg?auth_key=1885372976-573f6b56abc146a1a1b2f45593d1c0c2-0-d5521514d5968325f146c736cf0f0738" alt="SHIOSA Logo" class="logo-img">
             <div class="logo-text">
                 <h2>SHIOSA</h2>
                 <span>Save The Planet</span>
@@ -640,6 +764,7 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
+        <div class="hero-grid-bg"></div>
         <div class="hero-content">
             <span class="hero-badge"><i class="fas fa-leaf"></i> Tangu Mwaka 2012</span>
             <h1>Tunakomesha Uharibifu wa Mazingira, <span>Tunapanda Miti na Kusaidia Elimu.</span></h1>
@@ -655,13 +780,14 @@
     <section class="section" id="about">
         <div class="about-grid">
             <div class="about-text reveal">
-                <h3>Maono Yetu ni Sayari Mpya na Tanzania ya Kijani</h3>
+                <span class="section-subtitle">Tuna Kujua?</span>
+                <h3>Kuhusu SHIOSA: Maono Yetu ni Sayari Mpya na Tanzania ya Kijani</h3>
                 <p>SHIOSA ilianzishwa mwaka 2012 kwa Makao Makuu yake mkoani Mwanza, ikiwa na shughuli kubwa zinazoendelea Wilaya ya Nyang'hwale, mkoani Geita. Tunaamini kuwa ulinzi wa mazingira na maendeleo ya jamii vinakwenda sambamba.</p>
                 <p>Tunajihusisha sana na upandaji miti, kuanzisha hifadhi za misitu ya vijijini, na kutumia sanaa na elimu kuhamasisha jamii. Tumeunganisha juhudi za mazingira na miundombinu ya elimu kuhakikisha kila mtoto anapata mti wa kumlea na kutoa mbao za madarasa kwa ajili ya vizazi vijavyo.</p>
                 <a href="#projects" class="read-more">Tazama Miradi Yetu <i class="fas fa-arrow-right"></i></a>
             </div>
             <div class="about-img reveal">
-                <img src="https://z-cdn-media.chatglm.cn/files/60e7320a-fa94-4fa9-b1e2-014305e0eb35.jpg?auth_key=1885372081-a076b8b781c24c68bdaecedf471639a5-0-222f270dd6c15999a2bd859efb6e86fe" alt="Wataalamu wa Mazingira SHIOSA">
+                <img src="https://z-cdn-media.chatglm.cn/files/60e7320a-fa94-4fa9-b1e2-014305e0eb35.jpg?auth_key=1885372976-859d366cd37848ccab59359e561af603-0-33784ff73e86b20e3a376033e6a776be" alt="Wataalamu wa Mazingira SHIOSA">
             </div>
         </div>
     </section>
@@ -702,7 +828,7 @@
             <!-- Project 1 -->
             <div class="project-card reveal">
                 <div class="project-img">
-                    <img src="https://z-cdn-media.chatglm.cn/files/cc1e2b3e-dfa5-4442-9438-669ddcf1e59d.jpg?auth_key=1885372081-6d53c3eec0a44b168cf04422a4d8715f-0-30205982aed0cc9cb53a0f0b0861fe8b" alt="Wanafunzi Kitaluni">
+                    <img src="https://z-cdn-media.chatglm.cn/files/cc1e2b3e-dfa5-4442-9438-669ddcf1e59d.jpg?auth_key=1885372976-c8e3a8c8527842fcab063b257b1010f6-0-1b7b62e15cc9a7251b25e07de499e09f" alt="Wanafunzi Kitaluni">
                 </div>
                 <div class="project-content">
                     <span>Mazingira & Elimu</span>
@@ -713,8 +839,9 @@
             </div>
             <!-- Project 2 -->
             <div class="project-card reveal">
-                <div class="project-img">
-                    <img src="https://z-cdn-media.chatglm.cn/files/b240707c-2bca-4426-9935-408c244283cb.jpg?auth_key=1885372081-44fea1e43a774eb69235816b774e7c06-0-65bc9db8b6a7cafad61149ef6cb2e2df" alt="Mkutano na Wafadhili">
+                <!-- Imeongezwa class project-img-cover kufanya zoom kidogo bila kukata -->
+                <div class="project-img project-img-cover">
+                    <img src="https://z-cdn-media.chatglm.cn/files/b240707c-2bca-4426-9935-408c244283cb.jpg?auth_key=1885372976-91629de6a3f64132a068e89045d2c30c-0-15b986bcaa49d77fd9c7ba7926f347cf" alt="Mkutano na Wafadhili">
                 </div>
                 <div class="project-content">
                     <span>Ushirikiano</span>
@@ -726,7 +853,7 @@
             <!-- Project 3 -->
             <div class="project-card reveal">
                 <div class="project-img">
-                    <img src="https://z-cdn-media.chatglm.cn/files/4e97c18e-09c5-4756-a250-2703bdad335c.jpg?auth_key=1885372081-3e7b20ab9f5143cb91a77564671ac1d4-0-8ed79919db18d34c6a3cc7cac576b07e" alt="Sanaa na Mazingira">
+                    <img src="https://z-cdn-media.chatglm.cn/files/4e97c18e-09c5-4756-a250-2703bdad335c.jpg?auth_key=1885372976-807bdfbe7c7348a7b4050380d0ebd139-0-9c6de398062ed4fde25779d5d745ed92" alt="Sanaa na Mazingira">
                 </div>
                 <div class="project-content">
                     <span>Uhamasishaji</span>
@@ -745,10 +872,15 @@
             <h2 class="section-title">Tazama Jinsi Tunavyobadilisha Maisha</h2>
         </div>
         <div class="gallery-grid">
-            <div class="gallery-item reveal"><img src="https://z-cdn-media.chatglm.cn/files/60675216-042c-45bc-8a1c-02d36a057f1d.jpg?auth_key=1885372081-8b317e8147fc49ee8edb3349cc7acef8-0-060ff5c4a0e62a9708287ff4fab81958" alt="Wanafunzi taifa la kesho"></div>
-            <div class="gallery-item reveal"><img src="https://z-cdn-media.chatglm.cn/files/217daeb4-9fb4-49a4-bb6d-475c64558a6d.jpg?auth_key=1885372081-b4c5c7850a54425f8b4598b9c4dab1ca-0-a5e6a3196f47e73315f0c5fd41d19ba3" alt="Mkuu wa wilaya akizindua"></div>
-            <div class="gallery-item reveal"><img src="https://z-cdn-media.chatglm.cn/files/efb6d260-1e2f-4eaa-b796-439c904fb0b4.jpg?auth_key=1885372081-a28ca50c62e6463babea211853dc7443-0-5125e8bd58e6fafdcdd5e2b2dd4e5f24" alt="Elimu mazingira mashuleni"></div>
-            <div class="gallery-item reveal"><img src="https://z-cdn-media.chatglm.cn/files/d1e62602-4932-4a74-89d2-9f8d5561d5a5.jpg?auth_key=1885372081-db4beb67bbc449ea948cea313771581e-0-3c04a52ce143148cc1a50cb3e1778de2" alt="Mafunzo Barrick"></div>
+            <div class="gallery-item reveal"><img src="https://z-cdn-media.chatglm.cn/files/60675216-042c-45bc-8a1c-02d36a057f1d.jpg?auth_key=1885372976-8bca2a1dbf5b40c3bf19bac8771ba79e-0-5345c1ca750a34698a9de713abc4fa77" alt="Wanafunzi taifa la kesho"></div>
+            <div class="gallery-item reveal"><img src="https://z-cdn-media.chatglm.cn/files/217daeb4-9fb4-49a4-bb6d-475c64558a6d.jpg?auth_key=1885372976-00de760df39a4d748ebde2d36034b015-0-76651e425ff614996c9cb118995a79ff" alt="Mkuu wa wilaya akizindua"></div>
+            
+            <!-- Picha hii sasa itaonekana kamili bila kukatika kwa kutumia class gallery-contain -->
+            <div class="gallery-item gallery-contain reveal">
+                <img src="https://z-cdn-media.chatglm.cn/files/efb6d260-1e2f-4eaa-b796-439c904fb0b4.jpg?auth_key=1885372976-960e2b8593aa4967a10709fed63d206e-0-834936cee9de15db38382ebb029fb064" alt="Elimu mazingira mashuleni">
+            </div>
+            
+            <div class="gallery-item reveal"><img src="https://z-cdn-media.chatglm.cn/files/d1e62602-4932-4a74-89d2-9f8d5561d5a5.jpg?auth_key=1885372976-f1c47cccf3ea4fc386e58e64ca9f211d-0-da7d2d5726cdd0e89646aec52f688c28" alt="Mafunzo Barrick"></div>
         </div>
     </section>
 
@@ -756,10 +888,10 @@
     <footer id="contact">
         <div class="footer-grid">
             <div class="footer-col">
-                <h3>Kuhutu SHIOSA</h3>
+                <h3>Kuhusu SHIOSA</h3>
                 <p>Shirika la Okoa Sayari (SHIOSA) linaendelea kupambana na mabadiliko ya tabianchi nchini Tanzania. Lengo letu ni kuhifadhi mazingira na kujenga vizazi vijavyo kupitia elimu na upandaji miti.</p>
                 <div class="socials">
-                    <a href="https://www.facebook.com/share/18ynbSjT4K/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.facebook.com/share/1bwN2iaQse/" target="_blank"><i class="fab fa-facebook-f"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
                     <a href="#"><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-youtube"></i></a>
@@ -787,6 +919,9 @@
         </div>
     </footer>
 
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
     <script>
         // Preloader
         window.addEventListener('load', () => {
@@ -796,14 +931,36 @@
             }, 500);
         });
 
-        // Navbar Scroll Effect
+        // Scroll Progress Bar & Back to Top Button
+        const progressBar = document.getElementById('progressBar');
+        const backToTop = document.getElementById('backToTop');
         const header = document.getElementById('header');
+
         window.addEventListener('scroll', () => {
+            // Progress Bar
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + "%";
+
+            // Header scrolled state
             if (window.scrollY > 50) {
                 header.classList.add('scrolled');
             } else {
                 header.classList.remove('scrolled');
             }
+
+            // Back to top button visibility
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        // Back to Top Click
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         // Mobile Menu Toggle
@@ -867,6 +1024,28 @@
         }, { threshold: 0.5 });
 
         counters.forEach(counter => counterObserver.observe(counter));
+
+        // 3D Tilt Effect on Project Cards
+        const cards = document.querySelectorAll('.project-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 15;
+                const rotateY = (centerX - x) / 15;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
     </script>
 </body>
 </html>
